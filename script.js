@@ -29,20 +29,14 @@ function addToCart(productId) {
   if (!product) return;
 
   const cart = loadCart();
-  cart.push(product);
+  cart.push(product); // append to cart
   saveCart(cart);
   renderCart();
 }
 
-// Clear cart
-function clearCart() {
-  sessionStorage.removeItem("cart");
-  renderCart();
-}
-
-// Render product list with event listeners
+// Render the product list with Add buttons
 function renderProducts() {
-  products.forEach((product) => {
+  products.forEach(product => {
     const li = document.createElement("li");
     li.innerHTML = `
       ${product.name} - $${product.price} 
@@ -51,11 +45,10 @@ function renderProducts() {
     productList.appendChild(li);
   });
 
-  // Add event listeners after DOM elements are created
-  const buttons = document.querySelectorAll(".add-to-cart-btn");
-  buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = parseInt(btn.dataset.id);
+  // Add event listeners to all buttons
+  document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+    button.addEventListener("click", () => {
+      const id = parseInt(button.dataset.id);
       addToCart(id);
     });
   });
@@ -63,8 +56,8 @@ function renderProducts() {
 
 // Render cart from sessionStorage
 function renderCart() {
-  cartList.innerHTML = "";
   const cart = loadCart();
+  cartList.innerHTML = "";
 
   cart.forEach(item => {
     const li = document.createElement("li");
@@ -73,9 +66,13 @@ function renderCart() {
   });
 }
 
-// Attach event to Clear Cart button
-clearCartBtn.addEventListener("click", clearCart);
+// Clear cart
+function clearCart() {
+  sessionStorage.removeItem("cart");
+  renderCart();
+}
 
 // Initial render
 renderProducts();
 renderCart();
+clearCartBtn.addEventListener("click", clearCart);
